@@ -21,6 +21,6 @@ from reviews import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('reviews/', include('reviews.urls')), 
+    path('api/v1/', include('reviews.urls')),
     path('', views.index, name='index'),
 ]

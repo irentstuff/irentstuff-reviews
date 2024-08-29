@@ -1,10 +1,12 @@
-
-from django.contrib import admin
-from django.urls import path, include
-from . import views
+from django.urls import path
+from .views import CreateReview, GetReviewsForItem, GetReviewById, UpdateReview, DeleteReview, GetReviewsForUser, GetItemRating
 
 urlpatterns = [
-    path('', views.index, name='index'),  # Root of reviews app maps to index view
-    path('list/', views.review_list, name='review_list'),  # URL to list all reviews
-    path('<int:review_id>/', views.review_detail, name='review_detail'),  # URL to get details of a specific review
+    path('reviews/', CreateReview.as_view(), name='create-review'),
+    path('items/<uuid:item_id>/reviews/', GetReviewsForItem.as_view(), name='get-reviews-for-item'),
+    path('reviews/<uuid:review_id>/', GetReviewById.as_view(), name='get-review-by-id'),
+    path('reviews/<uuid:review_id>/', UpdateReview.as_view(), name='update-review'),
+    path('reviews/<uuid:review_id>/', DeleteReview.as_view(), name='delete-review'),
+    path('users/<uuid:user_id>/reviews/', GetReviewsForUser.as_view(), name='get-reviews-for-user'),
+    path('items/<uuid:item_id>/rating/', GetItemRating.as_view(), name='get-item-rating'),
 ]
