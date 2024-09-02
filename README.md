@@ -3,11 +3,8 @@
 This project is a microservice for managing reviews in the iRentStuff application. It is built using Django and Django REST Framework.
 
 ## Table of Contents
-
-## Table of Contents
 - [iRentStuff Reviews Microservice](#irentstuff-reviews-microservice)
   - [Table of Contents](#table-of-contents)
-  - [Table of Contents](#table-of-contents-1)
   - [Installation](#installation)
   - [Run the Project Locally](#run-the-project-locally)
   - [API Endpoints](#api-endpoints)
