@@ -5,18 +5,16 @@ from .serializers import ReviewSerializer
 from django.db.models import Avg
 from unittest.mock import patch
 import requests
-from django.http import Http404
-from django.http import HttpResponse
-
+from django.http import Http404, HttpResponse
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
 def index(request):
     return HttpResponse("Hello, this is the irentstuff-reviews page.")
 
-
 class CreateReview(generics.CreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-
 
 class GetReviewsForItem(generics.ListAPIView):
     serializer_class = ReviewSerializer
@@ -25,24 +23,24 @@ class GetReviewsForItem(generics.ListAPIView):
         item_id = self.kwargs['item_id']
         return Review.objects.filter(item_id=item_id)
 
-
 class GetReviewById(generics.RetrieveAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     lookup_field = 'review_id'
-
 
 class UpdateReview(generics.UpdateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     lookup_field = 'review_id'
 
+    def put(self, request, *args, **kwargs):
+        print("PUT request received")  # Debugging line
+        return super().put(request, *args, **kwargs)
 
 class DeleteReview(generics.DestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     lookup_field = 'review_id'
-
 
 class GetReviewsForUser(generics.ListAPIView):
     serializer_class = ReviewSerializer
@@ -50,7 +48,6 @@ class GetReviewsForUser(generics.ListAPIView):
     def get_queryset(self):
         user_id = self.kwargs['user_id']
         return Review.objects.filter(user_id=user_id)
-
 
 # Mocked item data version
 class GetItemRating(generics.RetrieveAPIView):
@@ -60,24 +57,35 @@ class GetItemRating(generics.RetrieveAPIView):
     def get(self, request, mock_get, *args, **kwargs):
         item_id = self.kwargs['item_id']
 
-        # Define the mock response data
-        mock_item_data = {
-            'id': item_id,
-            'name': 'Mocked Item Name',
-            'description': 'This is a mocked description of the item.'
+        # Define mock data for multiple items
+        mock_items_data = {
+            '77d98bfe-9e24-4252-9084-064a953afc22': {
+                'id': '77d98bfe-9e24-4252-9084-064a953afc22',
+                'name': 'Mocked Item Name 1',
+                'description': 'This is a mocked description of item 1.'
+            },
+            '3beed80b-69a2-42f0-b276-8e8684bc9076': {
+                'id': '3beed80b-69a2-42f0-b276-8e8684bc9076',
+                'name': 'Mocked Item Name 2',
+                'description': 'This is a mocked description of item 2.'
+            },
+            'f3a983a5-5d3c-4b0e-8e2d-1b0b9ffbc16e': {
+                'id': 'f3a983a5-5d3c-4b0e-8e2d-1b0b9ffbc16e',
+                'name': 'Mocked Item Name 3',
+                'description': 'This is a mocked description of item 3.'
+            },
+            'a67c7c48-7b5c-4b42-9834-cf5a1dc4975b': {
+                'id': 'a67c7c48-7b5c-4b42-9834-cf5a1dc4975b',
+                'name': 'Mocked Item Name 4',
+                'description': 'This is a mocked description of item 4.'
+            }
+            # Add more items here if needed
         }
 
-        # Configure the mock to return the mock data
-        mock_get.return_value.status_code = 200
-        mock_get.return_value.json.return_value = mock_item_data
-
-        # Simulate the API call (which will now use the mocked response)
-        try:
-            response = requests.get(f'http://mocked-item-service-url/items/{item_id}/')
-            response.raise_for_status()
-            item_data = response.json()
-        except requests.exceptions.RequestException as e:
-            raise Http404(f'Item with id {item_id} not found. {e}')
+        # Fetch the relevant item data based on item_id
+        item_data = mock_items_data.get(item_id)
+        if not item_data:
+            raise Http404(f'Item with id {item_id} not found.')
 
         # Fetch reviews for the item in the reviews database
         reviews = Review.objects.filter(item_id=item_id)
@@ -92,3 +100,9 @@ class GetItemRating(generics.RetrieveAPIView):
             "average_rating": average_rating,
             "total_reviews": total_reviews
         })
+
+class YourProtectedView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"message": "This is a protected view"})

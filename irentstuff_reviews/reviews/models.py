@@ -7,7 +7,7 @@ class Review(models.Model):
     item_id = models.UUIDField(default=uuid4)
     user_id = models.UUIDField(default=uuid4)
     rating = models.IntegerField(default=5)
-    comment = models.TextField(default="No comment")
+    comment = models.TextField(default="Test comment. Happy sunday, funday")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
