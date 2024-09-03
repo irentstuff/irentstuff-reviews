@@ -37,18 +37,18 @@ This project is a microservice for managing reviews in the iRentStuff applicatio
 ## API Endpoints
 Below are the main API endpoints you can test:
 
-1. Create a Review: POST /api/v1/reviews/
-1. Get Reviews for an Item: GET /api/v1/items/<uuid:item_id>/reviews/
-1. Get a Review by ID: GET /api/v1/reviews/<uuid:review_id>/
-1. Update a Review: PUT /api/v1/reviews/<uuid:review_id>/
-1. Delete a Review: DELETE /api/v1/reviews/<uuid:review_id>/
-1. Get Reviews for a User: GET /api/v1/users/<uuid:user_id>/reviews/
-1. Get Item Rating: GET /api/v1/items/<uuid:item_id>/rating/
+1. Create a Review: POST /reviews/
+2. Get Reviews for an Item: GET /items/<uuid:item_id>/reviews/
+3. Get a Review by ID: GET /reviews/<uuid:review_id>/
+4. Update a Review: PUT /reviews/<uuid:review_id>/
+5. Delete a Review: DELETE /reviews/<uuid:review_id>/
+6. Get Reviews for a User: GET /users/<uuid:user_id>/reviews/
+7. Get Item Rating: GET /items/<uuid:item_id>/rating/
 
 ## Testing the APIs with Postman
 
 1. Create a Review (POST)
-- URL: http://127.0.0.1:8000/api/v1/reviews/
+- URL: http://127.0.0.1:8000/reviews/
 - Method: POST
 - Request Body (JSON): 
   ``` json
@@ -60,18 +60,18 @@ Below are the main API endpoints you can test:
   "comment": "Great product!"
     }
 
-2. Get Reviews for an Item (GET)
-- URL: http://127.0.0.1:8000/api/v1/items/<item_id>/reviews/
+1. Get Reviews for an Item (GET)
+- URL: http://127.0.0.1:8000/items/<item_id>/reviews/
 - Method: GET
 - Replace `<item_id>` with the actual UUID of the item.
 
-3. Get a Review by ID (GET)
-- URL: http://127.0.0.1:8000/api/v1/reviews/<review_id>/
+1. Get a Review by ID (GET)
+- URL: http://127.0.0.1:8000/reviews/<review_id>/
 - Method: GET
 - Replace `<review_id>` with the actual UUID of the review.
 
-4. Update a Review (PUT)
-- URL: http://127.0.0.1:8000/api/v1/reviews/<review_id>/
+1. Update a Review (PUT)
+- URL: http://127.0.0.1:8000/reviews/<review_id>/
 - Method: PUT
 - Request Body (JSON): 
   ``` json
@@ -83,21 +83,21 @@ Below are the main API endpoints you can test:
 - Headers:
     Authorization: Bearer `<your-jwt-access-token>` - refer to [Authentication with JWT](#authentication-with-jwt)
 
-5. Delete a Review (DELETE)
-- URL: http://127.0.0.1:8000/api/v1/reviews/<review_id>/
+1. Delete a Review (DELETE)
+- URL: http://127.0.0.1:8000/reviews/<review_id>/
 - Method: DELETE
 - Replace `<review_id>` with the actual UUID of the review.
 - Headers:
     Authorization: Bearer `<your-jwt-access-token>` - refer to [Authentication with JWT](#authentication-with-jwt)
 
 
-6. Get Reviews for a User (GET)
-- URL: http://127.0.0.1:8000/api/v1/users/<user_id>/reviews/
+1. Get Reviews for a User (GET)
+- URL: http://127.0.0.1:8000/users/<user_id>/reviews/
 - Method: GET
 - Replace `<user_id>` with the actual UUID of the user.
 
-7. Get Item Rating (GET)
-- URL: http://127.0.0.1:8000/api/v1/items/<item_id>/rating/
+1. Get Item Rating (GET)
+- URL: http://127.0.0.1:8000/items/<item_id>/rating/
 - Method: GET
 - Replace `<item_id>` with the actual UUID of the item.
 
