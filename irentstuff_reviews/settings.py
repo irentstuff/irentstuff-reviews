@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 SECRET_KEY = 'django-insecure-r!ye3(+uevi2$d%t$qam%8o829&fgd%5h_57-itp&#cx++^3p-'
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0','13.213.70.177', 'localhost', 'ec2-13-213-70-177.ap-southeast-1.compute.amazonaws.com']
 
 # Application definition
 INSTALLED_APPS = [
@@ -56,8 +56,12 @@ WSGI_APPLICATION = 'irentstuff_reviews.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'reviews',  # The database name
+        'USER': 'admin',  # Your RDS username
+        'PASSWORD': 'mtech111',  # Your RDS password
+        'HOST': 'irentstuff-reviews-db.cpqym0scccor.ap-southeast-1.rds.amazonaws.com',
+        'PORT': '3306',
     }
 }
 
