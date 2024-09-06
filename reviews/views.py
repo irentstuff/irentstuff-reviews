@@ -8,6 +8,7 @@ import requests
 from django.http import Http404, HttpResponse
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 
 def index(request):
     return HttpResponse("Hello, this is the irentstuff-reviews page.")
@@ -15,9 +16,11 @@ def index(request):
 class CreateReview(generics.CreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-
+    permission_classes = [AllowAny]
+    
 class GetReviewsForItem(generics.ListAPIView):
     serializer_class = ReviewSerializer
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         item_id = self.kwargs['item_id']
@@ -27,11 +30,13 @@ class GetReviewById(generics.RetrieveAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     lookup_field = 'review_id'
+    permission_classes = [AllowAny]
 
 class UpdateReview(generics.UpdateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     lookup_field = 'review_id'
+    permission_classes = [AllowAny]
 
     def put(self, request, *args, **kwargs):
         print("PUT request received")  # Debugging line
@@ -41,9 +46,11 @@ class DeleteReview(generics.DestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     lookup_field = 'review_id'
+    permission_classes = [AllowAny]
 
 class GetReviewsForUser(generics.ListAPIView):
     serializer_class = ReviewSerializer
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         user_id = self.kwargs['user_id']
@@ -52,51 +59,24 @@ class GetReviewsForUser(generics.ListAPIView):
 # Mocked item data version
 class GetItemRating(generics.RetrieveAPIView):
     serializer_class = ReviewSerializer
+    permission_classes = [AllowAny]
 
-    @patch('requests.get')
-    def get(self, request, mock_get, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         item_id = self.kwargs['item_id']
+        print(f"Received item_id in URL: {item_id}")
 
-        # Define mock data for multiple items
-        mock_items_data = {
-            '77d98bfe-9e24-4252-9084-064a953afc22': {
-                'id': '77d98bfe-9e24-4252-9084-064a953afc22',
-                'name': 'Mocked Item Name 1',
-                'description': 'This is a mocked description of item 1.'
-            },
-            '3beed80b-69a2-42f0-b276-8e8684bc9076': {
-                'id': '3beed80b-69a2-42f0-b276-8e8684bc9076',
-                'name': 'Mocked Item Name 2',
-                'description': 'This is a mocked description of item 2.'
-            },
-            'f3a983a5-5d3c-4b0e-8e2d-1b0b9ffbc16e': {
-                'id': 'f3a983a5-5d3c-4b0e-8e2d-1b0b9ffbc16e',
-                'name': 'Mocked Item Name 3',
-                'description': 'This is a mocked description of item 3.'
-            },
-            'a67c7c48-7b5c-4b42-9834-cf5a1dc4975b': {
-                'id': 'a67c7c48-7b5c-4b42-9834-cf5a1dc4975b',
-                'name': 'Mocked Item Name 4',
-                'description': 'This is a mocked description of item 4.'
-            }
-            # Add more items here if needed
-        }
-
-        # Fetch the relevant item data based on item_id
-        item_data = mock_items_data.get(item_id)
-        if not item_data:
-            raise Http404(f'Item with id {item_id} not found.')
-
-        # Fetch reviews for the item in the reviews database
+        # Fetch reviews for the given item_id
         reviews = Review.objects.filter(item_id=item_id)
+        if not reviews.exists():
+            print(f"No reviews found for item_id: {item_id}")
+            raise Http404(f'Item with id {item_id} not found in reviews.')
+        
         total_reviews = reviews.count()
-        if total_reviews == 0:
-            return Response({"item_id": item_id, "average_rating": None, "total_reviews": 0})
-
         average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
+        print(f"Total reviews: {total_reviews}, Average rating: {average_rating}")
+
         return Response({
             "item_id": item_id,
-            "item_name": item_data.get('name'),  # Using mocked item data
             "average_rating": average_rating,
             "total_reviews": total_reviews
         })
