@@ -57,56 +57,46 @@ TEMPLATES = [
 WSGI_APPLICATION = 'irentstuff_reviews.wsgi.application'
 
 
-# Determine the environment
-ENVIRONMENT = os.getenv('DJANGO_ENVIRONMENT', 'development')
+# # Determine the environment
+# ENVIRONMENT = os.getenv('DJANGO_ENVIRONMENT', 'development')
 
-# Database configuration
-if ENVIRONMENT == 'production':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'reviews',  # Your MySQL database name
-            'USER': 'admin',  # Your MySQL username
-            'PASSWORD': 'mtech111',  # Your MySQL password
-            'HOST': 'irentstuff-reviews-db.cpqym0scccor.ap-southeast-1.rds.amazonaws.com',  # Your RDS host
-            'PORT': '3306',
-            'OPTIONS': {
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-            }
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
-
-
-# Database
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+# # Database configuration
+# if ENVIRONMENT == 'production':
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.mysql',
+#             'NAME': 'reviews',  # Your MySQL database name
+#             'USER': 'admin',  # Your MySQL username
+#             'PASSWORD': 'mtech111',  # Your MySQL password
+#             'HOST': 'reviewsdb.cpqym0scccor.ap-southeast-1.rds.amazonaws.com',  # Your RDS host
+#             'PORT': '3306',
+#             'OPTIONS': {
+#                 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+#             }
+#         }
 #     }
-#     # 'default': {
-#     #     'ENGINE': 'django.db.backends.mysql',
-#     #     'NAME': 'reviews',  # The database name
-#     #     'USER': 'admin',  # Your RDS username
-#     #     'PASSWORD': 'mtech111',  # Your RDS password
-#     #     'HOST': 'irentstuff-reviews-db.cpqym0scccor.ap-southeast-1.rds.amazonaws.com',
-#     #     'PORT': '3306',
-#     #     'OPTIONS': {
-#     #         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-#     #     }
-#     # }
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': BASE_DIR / 'db.sqlite3',
+#         }
+#     }
 
-#     # 'light': {
-#     #     'ENGINE': 'django.db.backends.sqlite3',
-#     #     'NAME': BASE_DIR / 'db.sqlite3',
-#     # }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'mysql.connector.django',
+        'NAME': 'reviews',  # The database name in MySQL
+        'USER': 'admin',  # Your RDS username
+        'PASSWORD': 'mtech111',  # Your RDS password
+        'HOST': 'reviewsdb.cpqym0scccor.ap-southeast-1.rds.amazonaws.com',  # Your RDS endpoint
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
+    }
+}
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
