@@ -20,10 +20,11 @@ jobs:
         pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Set up the database
+    - name: Set up the database 
       run: |
         python manage.py migrate 
 
-    - name: Run unit tests for models and views
+    - name: Run unit tests for models and views (using --noinput)
       run: |
-        python manage.py test reviews.tests.test_models reviews.tests.test_views
+        python manage.py test reviews.tests.test_models reviews.tests.test_views --noinput
+    
