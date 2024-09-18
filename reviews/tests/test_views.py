@@ -10,27 +10,30 @@ from uuid import uuid4
 class ReviewViewsTest(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.user = User.objects.create_user(username='testuser', password='testpass')
+        self.user = User.objects.create_user(username="testuser", password="testpass")
         self.review = Review.objects.create(
             rental_id=1,
             item_id=1,
             user_id=self.user.id,
             rating=5,
-            comment="Test review"
+            comment="Test review",
         )
 
     def test_create_review(self):
-        response = self.client.post(reverse('create-review'), {
-            'rental_id': 1,
-            'item_id': 1,
-            'user_id': 'test_user',
-            'rating': 5,
-            'comment': 'A new review comment'
-        }, format='json')
-        
+        response = self.client.post(
+            reverse("create-review"),
+            {
+                "rental_id": 1,
+                "item_id": 1,
+                "user_id": "test_user",
+                "rating": 5,
+                "comment": "A new review comment",
+            },
+            format="json",
+        )
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Review.objects.count(), 2)
-
 
 
 # # additional tests to write
