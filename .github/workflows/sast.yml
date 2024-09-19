@@ -1,0 +1,35 @@
+name: SAST with Semgrep
+
+# Trigger this workflow when a repository dispatch event occurs with event_type 'run-semgrep'
+on:
+    repository_dispatch:
+      types: [run-semgrep]
+
+jobs:
+  semgrep_analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4 
+
+    - name: Set up Python 3.12.6
+      uses: actions/setup-python@v5  
+      with:
+        python-version: '3.12.6'
+
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install semgrep  # Install Semgrep
+
+    - name: Run Semgrep analysis
+      run: |
+        semgrep --config p/ci --error --json > semgrep-report.json  # Run Semgrep with default CI rules
+
+    - name: Upload Semgrep report
+      uses: actions/upload-artifact@v4  
+      with:
+        name: semgrep-report
+        path: semgrep-report.json
