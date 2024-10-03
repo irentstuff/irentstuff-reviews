@@ -23,10 +23,16 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
+from django_prometheus import exports
+
+
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("reviews.urls")),
     path("", views.index, name="index"),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path('metrics/', exports.ExportToDjangoView, name='metrics'),
+    path('', include('django_prometheus.urls')),
 ]
