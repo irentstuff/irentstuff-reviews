@@ -23,18 +23,6 @@ def increment_create_review_counter(user_id, item_id):
 def record_request_latency(latency):
     request_latency.observe(latency)
 
-def increment_error_count(status_code):
-    api_error_counter.labels(status_code=status_code).inc()
-
-def increment_successful_request_count():
-    successful_request_counter.inc()
-
-def increment_reviews_fetched(item_id, count):
-    reviews_fetched_counter.labels(item_id=item_id).inc(count)
-
-def increment_unauthorized_access():
-    unauthorized_access_counter.inc()
-
 
 # Define a metric for tracking error responses by status code
 api_error_counter = Counter(

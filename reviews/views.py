@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 
 from .metrics import (
+    request_counter,
     create_review_counter, 
     create_review_latency, 
     get_reviews_latency,
@@ -19,7 +20,8 @@ from .metrics import (
     increment_error_count,
     increment_successful_request_count,
     increment_reviews_fetched,
-    increment_unauthorized_access
+    record_request_latency,
+
 )
 
 import time
