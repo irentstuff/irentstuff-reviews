@@ -3,25 +3,16 @@ from prometheus_client import Counter, Histogram, REGISTRY
 
 # Helper function to check if a metric is already registered
 def check_metric(metric_name):
-    return any(
-        [metric for metric in REGISTRY.collect()
-            if metric.name == metric_name]
-    )
+    return any([metric for metric in REGISTRY.collect() if metric.name == metric_name])
 
 
 # Define some metrics with checks to avoid duplicates
 if not check_metric("django_request_count"):
-    request_counter = Counter(
-        "django_request_count",
-        "Total number of requests"
-    )
+    request_counter = Counter("django_request_count", "Total number of requests")
 
 
 if not check_metric("django_request_latency_seconds"):
-    request_latency = Histogram(
-        "django_request_latency_seconds",
-        "Request latency"
-    )
+    request_latency = Histogram("django_request_latency_seconds", "Request latency")
 
 
 if not check_metric("create_review_requests_total"):
@@ -53,15 +44,12 @@ if not check_metric("delete_review_latency_seconds"):
 
 if not check_metric("unauthorized_access_total"):
     unauthorized_access_counter = Counter(
-        "unauthorized_access_total",
-        "Total number of unauthorized access attempts"
+        "unauthorized_access_total", "Total number of unauthorized access attempts"
     )
 
 if not check_metric("api_errors_total"):
     api_error_counter = Counter(
-        "api_errors_total",
-        "Total number of API errors by status code",
-        ["status_code"]
+        "api_errors_total", "Total number of API errors by status code", ["status_code"]
     )
 
 if not check_metric("successful_requests_total"):
@@ -71,9 +59,7 @@ if not check_metric("successful_requests_total"):
 
 if not check_metric("reviews_fetched_total"):
     reviews_fetched_counter = Counter(
-        "reviews_fetched_total",
-        "Total number of reviews fetched per item",
-        ["item_id"]
+        "reviews_fetched_total", "Total number of reviews fetched per item", ["item_id"]
     )
 
 

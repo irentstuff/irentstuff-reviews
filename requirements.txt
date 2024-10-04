@@ -12,6 +12,7 @@ django-cors-headers==4.4.0
 djangorestframework==3.15.2
 djangorestframework-jwt==1.11.0
 djangorestframework-simplejwt==5.3.1
+django-prometheus
 gunicorn==23.0.0
 idna==3.8
 mypy-extensions==1.0.0

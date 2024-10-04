@@ -40,10 +40,7 @@ class CreateReview(generics.CreateAPIView):
         request_counter.inc()
 
         if not user_id or not item_id:
-            return Response(
-                {"error": "user_id and item_id are required"},
-                status=400
-            )
+            return Response({"error": "user_id and item_id are required"}, status=400)
 
         # Increment counter with labels
         create_review_counter.labels(user_id=user_id, item_id=item_id).inc()
@@ -83,10 +80,7 @@ class GetReviewsForItem(generics.ListAPIView):
 
         if not queryset.exists():
             increment_error_count(404)
-            return Response(
-                {"message": "No reviews for this item found."},
-                status=404
-            )
+            return Response({"message": "No reviews for this item found."}, status=404)
 
         increment_reviews_fetched(item_id=item_id, count=queryset.count())
 
@@ -176,10 +170,7 @@ class DeleteReview(generics.DestroyAPIView):
         delete_review_latency.observe(latency)
 
         return Response(
-            {
-                "message": "Review deleted successfully.",
-                "review_id": review_id
-            },
+            {"message": "Review deleted successfully.", "review_id": review_id},
             status=200,
         )
 
@@ -197,11 +188,7 @@ class GetReviewsForUser(generics.ListAPIView):
         queryset = self.get_queryset()
         if not queryset.exists():
             increment_error_count(404)
-            return Response(
-                {
-                    "message": "No reviews found for this user."
-                },
-                status=404)
+            return Response({"message": "No reviews found for this user."}, status=404)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -230,10 +217,7 @@ class GetItemRating(generics.RetrieveAPIView):
 
         total_reviews = reviews.count()
         average_rating = reviews.aggregate(Avg("rating"))["rating__avg"]
-        print(
-            f"Total reviews: {total_reviews},"
-            f"Average rating: {average_rating}"
-        )
+        print(f"Total reviews: {total_reviews}," f"Average rating: {average_rating}")
 
         return Response(
             {
