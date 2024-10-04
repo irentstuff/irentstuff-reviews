@@ -1,128 +1,36 @@
-# iRentStuff Reviews Microservice 
+# Running Prometheus
+This branch will work with feat--reviews-metrics-tracking branch to run prometheus on your microservice (run them locally for now).
 
-This project is a microservice for managing reviews in the iRentStuff application. It is built using Django and Django REST Framework.
+https://prometheus.io/docs/prometheus/latest/getting_started/
 
-## Table of Contents
-- [iRentStuff Reviews Microservice](#irentstuff-reviews-microservice)
-  - [Table of Contents](#table-of-contents)
-  - [Installation](#installation)
-  - [Run the Project Locally](#run-the-project-locally)
-  - [API Endpoints](#api-endpoints)
-  - [Testing the APIs with Postman](#testing-the-apis-with-postman)
-  - [Authentication with JWT](#authentication-with-jwt)
+1. Download Prometheus
+Go to the Prometheus download page and find the correct version for your system. If you're on macOS, choose the darwin build.
 
-## Installation
+2. Extract the Archive
+Extract the downloaded archive: `tar -xvzf prometheus-2.53.2.darwin-amd64.tar.gz`.
+This will create a folder prometheus-2.53.2.darwin-amd64.
 
-1. Clone the repository:
+3. Setup Configuration (prometheus.yml)
+Ensure that you have a prometheus.yml configuration file in the same folder. Refer to yaml file in this branch
 
-   ```bash
-   git clone https://github.com/irentstuff/irentstuff-reviews.git
-   cd irentstuff-reviews
-1. Set up virtual env: 
-   ``` bash 
-   python -m venv venv
-   source venv/bin/activate
-1. Install the dependencies:
-   ``` bash
-   pip install -r requirements.txt
+4. Run Prometheus
+Navigate to the extracted directory:
+`cd prometheus-2.53.2.darwin-amd64`
 
-## Run the Project Locally
+Then, use the following command to run Prometheus with the provided arguments:
+`./prometheus --config.file=prometheus.yml --web.enable-lifecycle --log.level=debug | tee prometheus.log`
 
-1. The project will be running on http://127.0.0.1:8000/.
-    
-    ``` bash
-    python manage.py migrate
-    python manage.py runserver
+This will:
+- Start Prometheus with the specified configuration file (prometheus.yml).
+- Enable the web lifecycle API (--web.enable-lifecycle), allowing you to reload configurations without restarting Prometheus.
+- Set the logging level to debug (--log.level=debug), providing verbose logs.
+- Pipe the logs to a file (prometheus.log) while also displaying them in the terminal.
 
-## API Endpoints
-Below are the main API endpoints you can test:
+5. Access the Prometheus UI
+Once Prometheus is running, you can access the UI by opening your browser and navigating to:
+`http://localhost:9090`
 
-1. Create a Review: POST /reviews/
-2. Get Reviews for an Item: GET /items/<uuid:item_id>/reviews/
-3. Get a Review by ID: GET /reviews/<uuid:review_id>/
-4. Update a Review: PUT /reviews/<uuid:review_id>/
-5. Delete a Review: DELETE /reviews/<uuid:review_id>/
-6. Get Reviews for a User: GET /users/<uuid:user_id>/reviews/
-7. Get Item Rating: GET /items/<uuid:item_id>/rating/
-
-## Testing the APIs with Postman
-
-1. Create a Review (POST)
-- URL: http://127.0.0.1:8000/reviews/
-- Method: POST
-- Request Body (JSON): 
-  ``` json
-  {
-  "rental_id": "4be6ed3c-08da-418b-ac4f-eeefd7ad16c5",
-  "item_id": "3beed80b-69a2-42f0-b276-8e8684bc9076",
-  "user_id": "79f08fe1-0074-4520-af15-57eb12f3865d",
-  "rating": 5,
-  "comment": "Great product!"
-    }
-
-1. Get Reviews for an Item (GET)
-- URL: http://127.0.0.1:8000/items/<item_id>/reviews/
-- Method: GET
-- Replace `<item_id>` with the actual UUID of the item.
-
-1. Get a Review by ID (GET)
-- URL: http://127.0.0.1:8000/reviews/<review_id>/
-- Method: GET
-- Replace `<review_id>` with the actual UUID of the review.
-
-1. Update a Review (PUT)
-- URL: http://127.0.0.1:8000/reviews/<review_id>/
-- Method: PUT
-- Request Body (JSON): 
-  ``` json
-  {
-  "rating": 4,
-  "comment": "Updated comment"
-    }
-- Replace `<review_id>` with the actual UUID of the review.
-- Headers:
-    Authorization: Bearer `<your-jwt-access-token>` - refer to [Authentication with JWT](#authentication-with-jwt)
-
-1. Delete a Review (DELETE)
-- URL: http://127.0.0.1:8000/reviews/<review_id>/
-- Method: DELETE
-- Replace `<review_id>` with the actual UUID of the review.
-- Headers:
-    Authorization: Bearer `<your-jwt-access-token>` - refer to [Authentication with JWT](#authentication-with-jwt)
+6. Verify Targets
+To ensure Prometheus is scraping the correct endpoints, go to http://localhost:9090/targets. You should see the Prometheus and Django targets with a green status if they are running and being scraped successfully.
 
 
-1. Get Reviews for a User (GET)
-- URL: http://127.0.0.1:8000/users/<user_id>/reviews/
-- Method: GET
-- Replace `<user_id>` with the actual UUID of the user.
-
-1. Get Item Rating (GET)
-- URL: http://127.0.0.1:8000/items/<item_id>/rating/
-- Method: GET
-- Replace `<item_id>` with the actual UUID of the item.
-
-## Authentication with JWT
-For certain requests, such as updating and deleting reviews, you will need to provide an authentication token.
-
-1. Generate a JWT Token (POST)
-- URL: http://127.0.0.1:8000/api/token/
-- Method: POST
-- Body: JSON
-  ```json
-  {
-  "username": "your-username",
-  "password": "your-password"
-    }
-- Response: JSON
-  ``` json 
-  {
-  "access": "your-access-token",
-  "refresh": "your-refresh-token"
-    }
-2. Using the JWT Token in Postman
-Once you get the access token from the above API, you need to include it in the Authorization header of your PUT and DELETE requests.
-
-    In Postman, for the PUT and DELETE requests:
-    - Go to the Authorization tab.
-    - Select Bearer Token from the dropdown.
-    - Paste your JWT access token in the Token field.
