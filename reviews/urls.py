@@ -36,7 +36,4 @@ urlpatterns = [
         name="get-item-rating",
     ),
     # path('test-put/', TestPutView.as_view(), name='test-put'),
-    
-    
-    
 ]

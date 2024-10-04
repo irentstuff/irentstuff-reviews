@@ -36,13 +36,13 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    'django_prometheus.middleware.PrometheusBeforeMiddleware',
+    "django_prometheus.middleware.PrometheusBeforeMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
-    'django_prometheus.middleware.PrometheusAfterMiddleware',
+    "django_prometheus.middleware.PrometheusAfterMiddleware",
 ]
 
 ROOT_URLCONF = "irentstuff_reviews.urls"
@@ -150,4 +150,4 @@ REST_FRAMEWORK = {
 }
 
 
-PROMETHEUS_EXPORT_MIGRATIONS = False 
+PROMETHEUS_EXPORT_MIGRATIONS = False
