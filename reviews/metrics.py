@@ -5,7 +5,8 @@ from prometheus_client import Counter, Histogram, REGISTRY
 def check_metric(metric_name):
     return any(
         [metric for metric in REGISTRY.collect()
-            if metric.name == metric_name])
+            if metric.name == metric_name]
+    )
 
 
 # Define some metrics with checks to avoid duplicates

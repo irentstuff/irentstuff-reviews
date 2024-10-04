@@ -114,10 +114,7 @@ class GetReviewById(generics.RetrieveAPIView):
             review = Review.objects.get(review_id=review_id)
         except Review.DoesNotExist:
             increment_error_count(404)
-            return Response(
-                {"message": "No such review found."},
-                status=404
-            )
+            return Response({"message": "No such review found."}, status=404)
         return Response(self.get_serializer(review).data)
 
 
@@ -201,9 +198,10 @@ class GetReviewsForUser(generics.ListAPIView):
         if not queryset.exists():
             increment_error_count(404)
             return Response(
-                {"message": "No reviews found for this user."},
-                status=404
-            )
+                {
+                    "message": "No reviews found for this user."
+                },
+                status=404)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
