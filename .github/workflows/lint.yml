@@ -24,6 +24,10 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=./env,./venv,./other_directories_to_exclude
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics --exclude=./env,./venv,./other_directories_to_exclude
 
-    - name: Format with black
+    - name: Run Black and Reformat
       run: |
-        black --check .
+        black .  # Reformat code using Black
+
+    - name: Run Black Check
+      run: |
+        black --check . 
